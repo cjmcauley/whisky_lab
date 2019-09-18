@@ -17,14 +17,14 @@ public class DistilleryRepositoryImpl implements DistilleryRepositoryCustom {
     EntityManager entityManager;
 
     @Transactional
-    public List<Distillery> findDistilleryThatHaveWhiskyAged(int age) {
+    public List<Distillery> findDistilleryThatHasWhiskyAged(int age) {
         List<Distillery> results = null;
 
         try {
             Session session = entityManager.unwrap(Session.class);
             Criteria cr = session.createCriteria(Distillery.class);
-            cr.createAlias("whiskies", "whiskiesAlias");
-            cr.add(Restrictions.eq("whiskiesAlias.age", age));
+            cr.createAlias("whiskies", "whiskyAlias");
+            cr.add(Restrictions.eq("whiskyAlias.age", age));
             results = cr.list();
         }
 
@@ -32,6 +32,8 @@ public class DistilleryRepositoryImpl implements DistilleryRepositoryCustom {
             ex.printStackTrace();
         }
         return results;
-
     }
+
+
+
 }

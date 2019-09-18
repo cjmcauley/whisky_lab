@@ -25,8 +25,8 @@ public class WhiskyRepositoryImpl implements WhiskyRepositoryCustom {
         try {
             Session session = entityManager.unwrap(Session.class);
             Criteria cr = session.createCriteria(Whisky.class);
-            cr.createAlias("regions", "regionAlias");
-            cr.add(Restrictions.eq("regionAlias.name", region));
+            cr.createAlias("distillery", "distilleryAlias");
+            cr.add(Restrictions.eq("distilleryAlias.region", region));
             results = cr.list();
         }
 
@@ -35,5 +35,25 @@ public class WhiskyRepositoryImpl implements WhiskyRepositoryCustom {
         }
 
         return results;
+    }
+
+    @Transactional
+    public List<Whisky> findDistilleryThatHaveWhiskyAged(long id, int age) {
+        List<Whisky> results = null;
+
+        try {
+            Session session = entityManager.unwrap(Session.class);
+            Criteria cr = session.createCriteria(Whisky.class);
+            cr.createAlias("distillery", "distilleryAlias");
+            cr.add(Restrictions.eq("distilleryAlias.id", id));
+            cr.add(Restrictions.eq("age", age));
+            results = cr.list();
+        }
+
+        catch (HibernateException ex) {
+            ex.printStackTrace();
+        }
+        return results;
+
     }
 }
